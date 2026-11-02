@@ -1,9 +1,10 @@
-import { useState } from 'react'
 
+import { useState } from 'react';
 
 function App() {
   const [search, setSearch] = useState("");
   const [filteredData, setFilteredData] = useState([]);
+  const [sortOrder, setsortOrder] = useState("");
 
   const data = [
     { id: 1, name: "Laptop", price: 55000, category: "Electronics" },
@@ -20,6 +21,7 @@ function App() {
 
   const handleSearch = () => {
     const searchTerm = search.toLowerCase();
+
     setFilteredData(
       data.filter((item) =>
         item.name.toLowerCase().includes(searchTerm) ||
@@ -28,7 +30,23 @@ function App() {
     );
   };
 
+  function handleSort(e) {
+    setsortOrder(e.target.value);
+  }
+
   const productsToDisplay = search ? filteredData : data;
+
+  const sortedData = [...productsToDisplay];
+
+  if (sortOrder === "low") {
+    sortedData.sort((a, b) => a.price - b.price);
+  } else if (sortOrder === "high") {
+    sortedData.sort((a, b) => b.price - a.price);
+  } else if (sortOrder === "category") {
+    sortedData.sort((a, b) =>
+      a.category.localeCompare(b.category)
+    );
+  }
 
   return (
     <>
@@ -38,9 +56,17 @@ function App() {
         value={search}
         onChange={(event) => setSearch(event.target.value)}
       />
+
       <button onClick={handleSearch}>Search</button>
 
-      {productsToDisplay.map((item) => (
+      <select value={sortOrder} onChange={handleSort}>
+        <option value="">Default</option>
+        <option value="low">Price: Low to High</option>
+        <option value="high">Price: High to Low</option>
+        <option value="category">Category: A to Z</option>
+      </select>
+
+      {sortedData.map((item) => (
         <div key={item.id}>
           <p>=============================</p>
           <p>{item.name}</p>
@@ -53,5 +79,4 @@ function App() {
   );
 }
 
-
-export default App
+export default App;
