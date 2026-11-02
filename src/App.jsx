@@ -2,7 +2,9 @@ import { useState } from 'react'
 
 
 function App() {
-  const [count, setCount] = useState(0);
+  const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+
   const data = [
     { id: 1, name: "Laptop", price: 55000, category: "Electronics" },
     { id: 2, name: "Phone", price: 25000, category: "Electronics" },
@@ -16,13 +18,35 @@ function App() {
     { id: 10, name: "Cap", price: 499, category: "Clothing" }
   ];
 
+  const handleSearch = () => {
+    const searchTerm = search.toLowerCase();
+    setFilteredData(
+      data.filter((item) =>
+        item.name.toLowerCase().includes(searchTerm) ||
+        item.category.toLowerCase().includes(searchTerm)
+      )
+    );
+  };
+
+  const productsToDisplay = search ? filteredData : data;
+
   return (
     <>
-      {data.map((item) => (
+      <input
+        type="text"
+        placeholder="Search products"
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+      />
+      <button onClick={handleSearch}>Search</button>
+
+      {productsToDisplay.map((item) => (
         <div key={item.id}>
-          <h3>{item.name}</h3>
+          <p>=============================</p>
+          <p>{item.name}</p>
           <p>Price: ₹{item.price}</p>
           <p>Category: {item.category}</p>
+          <p>=============================</p>
         </div>
       ))}
     </>
