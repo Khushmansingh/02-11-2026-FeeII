@@ -17,7 +17,7 @@ function App() {
   ];
 
   return (
-    <div>
+    <>
       {data.map((item) => (
         <div key={item.id}>
           <h3>{item.name}</h3>
@@ -25,7 +25,7 @@ function App() {
           <p>Category: {item.category}</p>
         </div>
       ))}
-    </div>
+    </>
   );
 }
 
